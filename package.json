@@ -1,0 +1,16 @@
+{
+  "name": "aiven_exporter",
+  "version": "1.0.0",
+  "description": "This app will authenticate to aiven and export prometheus metrics for all services in all projects. Useful for exporting metrics from projects that don't have a prometheus integration",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.7.3",
+    "express": "^4.19.2",
+    "prom-client": "^15.1.3"
+  }
+}

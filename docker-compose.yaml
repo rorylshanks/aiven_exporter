@@ -1,0 +1,7 @@
+services:
+  aiven_exporter:
+    image: rorylshanks/aiven_exporter:latest
+    environment:
+      AIVEN_TOKEN: ${AIVEN_TOKEN}
+    ports:
+      - 3000:3000
