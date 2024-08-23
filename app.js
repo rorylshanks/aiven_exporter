@@ -72,7 +72,7 @@ const parseMostRecentMetric = (metricData) => {
     if (rows.length === 0) return null;
   
     const mostRecentRow = rows[rows.length - 1];
-    const metricValue = mostRecentRow[1];
+    const metricValue = mostRecentRow[mostRecentRow.length - 1];
   
     return metricValue;
   };
@@ -90,6 +90,11 @@ const updateMetrics = async () => {
       const diskUsage = parseMostRecentMetric(metrics.disk_usage);
       const loadAverage = parseMostRecentMetric(metrics.load_average);
       const memoryUsage = parseMostRecentMetric(metrics.mem_usage);
+      if (!cpuUsage || !diskUsage || !loadAverage || !memoryUsage) {
+        console.log(`Service ${service} has returned invalid metrics, skipping`)
+        console.log(JSON.stringify(metrics))
+        continue;
+      }
       cpuUsageGauge.set(
         { project: project.project_name, service: service.service_name },
         cpuUsage
