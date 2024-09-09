@@ -5,6 +5,8 @@ const client = require('prom-client');
 const app = express();
 const port = 3000;
 
+const UPDATE_INTERVAL = process.env.UPDATE_INTERVAL || 60000
+
 // Replace with your Aiven API token
 const AIVEN_TOKEN = process.env.AIVEN_TOKEN;
 
@@ -113,7 +115,6 @@ const updateMetrics = async () => {
       );
     }
   }
-  setTimeout(updateMetrics, process.env.UPDATE_INTERVAL || 60000)
 };
 
 app.get('/metrics', async (req, res) => {
@@ -133,4 +134,21 @@ app.listen(port, () => {
 });
 
 
-updateMetrics();
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+async function loop() {
+  while (true) {
+    try {
+      await updateMetrics();
+    } catch (error) {
+      console.log(error)
+    }
+    
+    console.log("Metrics updated! Sleeping for " + UPDATE_INTERVAL + "ms")
+    sleep(UPDATE_INTERVAL)
+  }
+}
+
