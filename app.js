@@ -113,11 +113,11 @@ const updateMetrics = async () => {
       );
     }
   }
+  setTimeout(updateMetrics, process.env.UPDATE_INTERVAL || 60000)
 };
 
 app.get('/metrics', async (req, res) => {
     try {
-        await updateMetrics();
         res.set('Content-Type', client.register.contentType);
         var metrics = await client.register.metrics()
         res.send(metrics);
@@ -126,9 +126,11 @@ app.get('/metrics', async (req, res) => {
         console.log(error)
         res.status(500).send(error.message)
     }
-
 });
 
 app.listen(port, () => {
   console.log(`Prometheus metrics server running at http://localhost:${port}/metrics`);
 });
+
+
+updateMetrics();
